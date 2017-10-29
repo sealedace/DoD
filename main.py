@@ -72,9 +72,6 @@ def downloadByYear(baseUrl, browser, year=17):
 
     for i in range(1, 12):
         path1 = "{:}/{:0>2}".format(path, i)
-        if not os.path.exists(path1):
-            print "Create folder: " + path1
-            os.makedirs(path1)
 
         regex = "duels/{:0>2}-{:0>2}-*".format(year, i)
         links = browser.links(regex)
@@ -86,6 +83,9 @@ def downloadByYear(baseUrl, browser, year=17):
             print links
             pass
         else:
+            if not os.path.exists(path1):
+                print "Create folder: " + path1
+            os.makedirs(path1)
             downloadByDetailUrl(path1, browser, link.attrs["href"])
 
         browser.open("http://dwellingofduels.net/duels/")
