@@ -15,14 +15,14 @@ def real_path(file_name):
     return (os.path.dirname(os.path.realpath(__file__)) + '/' + file_name)
 
 def makeRequest(url):
-    r = requests.get(url)
-
-    if r.status_code == 200:
-        print('request ok:')
-        return r.text
-    else:
-        print("request:" + url + " failed!")
-        return None
+    r = requests.get(url, stream=True)
+    return r
+    # if r.status_code == 200:
+    #     print('request ok:')
+    #     return r.text
+    # else:
+    #     print("request:" + url + " failed!")
+    #     return None
 
 def downloadMp3(baseUrl, url):
     print "Start download " + url
@@ -35,19 +35,20 @@ def downloadMp3(baseUrl, url):
         return
 
     data = makeRequest(url)
+
     if (data == None):
         print fileName + "download failed"
         return
 
-    file = open(path, 'wb')
-    file.write(data)
-    file.flush()
-    file.close()
-
+    with open(path, 'wb') as fd:
+        for chunk in data.iter_content(chunk_size=128):
+            fd.write(chunk)
+        
+        fd.flush()
+        fd.close()
 
 def downloadByDetailUrl(baseUrl, browser, url):
     url = "http://dwellingofduels.net" + url
-    browser.close()
     browser.open(url)
     
     links = browser.links()
@@ -80,9 +81,12 @@ def downloadByYear(baseUrl, browser, year=17):
         try:
             link = links[0]
         except:
+            print links
             pass
         else:
             downloadByDetailUrl(path1, browser, link.attrs["href"])
+
+        browser.open("http://dwellingofduels.net/duels/")
         
             
 
@@ -95,11 +99,9 @@ def main():
         print "Create folder: " + dir
         os.makedirs(dir)
 
-    url = "http://dwellingofduels.net/duels/"
     browser = mechanicalsoup.StatefulBrowser()
-    browser.open(url)
-
-    downloadByYear(dir, browser, 17)
+    for i in range(3, 17):
+        downloadByYear(dir, browser, i)
     browser.close()
 
 
