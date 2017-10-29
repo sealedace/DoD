@@ -68,6 +68,8 @@ def downloadByYear(baseUrl, browser, year=17):
         print "Create folder: " + path
         os.makedirs(path)
 
+    browser.open("http://dwellingofduels.net/duels/")
+
     for i in range(1, 12):
         path1 = "{:}/{:0>2}".format(path, i)
         if not os.path.exists(path1):
