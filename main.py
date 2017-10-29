@@ -70,7 +70,7 @@ def downloadByYear(baseUrl, browser, year=17):
 
     browser.open("http://dwellingofduels.net/duels/")
 
-    for i in range(1, 12):
+    for i in range(1, 13):
         path1 = "{:}/{:0>2}".format(path, i)
 
         regex = "duels/{:0>2}-{:0>2}-*".format(year, i)
@@ -102,7 +102,7 @@ def main():
         os.makedirs(dir)
 
     browser = mechanicalsoup.StatefulBrowser()
-    for i in range(3, 17):
+    for i in range(3, 18):
         downloadByYear(dir, browser, i)
     browser.close()
 
