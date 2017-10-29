@@ -85,7 +85,7 @@ def downloadByYear(baseUrl, browser, year=17):
         else:
             if not os.path.exists(path1):
                 print "Create folder: " + path1
-            os.makedirs(path1)
+                os.makedirs(path1)
             downloadByDetailUrl(path1, browser, link.attrs["href"])
 
         browser.open("http://dwellingofduels.net/duels/")
